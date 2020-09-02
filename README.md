@@ -1,4 +1,6 @@
-# navi-web
+# Quik导航
+基于Vue开发的导航网站，需要后端支持
+
 
 ## Project setup
 ```
@@ -19,6 +21,3 @@ npm run build
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
