@@ -22,7 +22,7 @@ export default {
   color: #2c3e50;
   margin-left: 15%;
   margin-right: 15%;
-  padding-top: 60px;
+  padding-top: 30px;
 
 }
 </style>
