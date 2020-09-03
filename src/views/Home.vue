@@ -40,9 +40,9 @@
 
           <!-- tab 自定义 按钮 包括 删除和修改 -->
           <span slot="label" class="my-tag">
-            <i class="el-icon-edit" v-if="isEdit" @click="updateTag(tag.tid, tag.tname, tag.torder)"></i>
+            <i class="el-icon-edit " v-if="isEdit" @click="updateTag(tag.tid, tag.tname, tag.torder)">{{tag.torder}}</i>
             {{ tag.tname }}
-            <i class="el-icon-delete" v-if="isEdit" @click="removeTag(tag.tid, tag.tname, tag.torder)"></i>
+            <i class="el-icon-delete "  v-if="isEdit" @click="removeTag(tag.tid, tag.tname, tag.torder)"></i>
           </span>
 
 
@@ -56,7 +56,7 @@
               <!-- 由于后台接口的问题，如果某个分类没有网站，也会对应一个 id = 0 的空值，所以当 id = 0 时要排除-->
               <div class="my-button" v-if="web.id !== 0">
 
-              <span class="el-icon-edit edit-site" @click="editSite(web.id,web.name, web.url, web.order)" v-if="isEdit"></span>
+              <span class="el-icon-edit edit-site" @click="editSite(web.id,web.name, web.url, web.order)" v-if="isEdit">{{web.order}}</span>
 
               <el-link
                   :href="web.url"
@@ -199,6 +199,7 @@ export default {
     },
 
     getData () {
+
       let api = '/api/tag'
       Axios.get(api).then((response) => {
         this.websites = response.data.result
@@ -206,6 +207,7 @@ export default {
       }).catch((error) => {
         console.log(error)
       })
+
     },
 
     // 网站小编辑按钮

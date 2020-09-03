@@ -15,10 +15,17 @@ const routes = [
     name: 'Home',
     component: Home,
   },
+  {
+    path: "/*",
+    name: '404',
+    component: () => import('../views/Home.vue'),
+  }
 
 ]
 
+// 设置为history模式，否则url后面会有锚点#
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 
