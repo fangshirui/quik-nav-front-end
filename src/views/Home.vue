@@ -9,7 +9,9 @@
     <el-row type="flex" justify="center" style="margin-top: 30px">
       <el-col :span="8">
         <!--设置keyup 按enter键也能触发搜索 -->
-        <el-input v-model="keyWord" @keyup.enter.native="search" type="text"></el-input>
+        <el-input v-model="keyWord" @keyup.enter.native="search" type="text"  autofocus>
+          <i slot="suffix" class="el-input__icon el-icon-search" ></i>
+        </el-input>
       </el-col>
 
     </el-row>
@@ -220,7 +222,7 @@ export default {
   data () {
     return {
       keyWord: '',
-      searchEngine: 'google',
+      searchEngine: '',
       websites: [],
       activeTag: '1',
       isEdit: false,
@@ -595,6 +597,12 @@ export default {
       }else{
         this.activeTag = localStorage.getItem('activeTag')
       }
+
+      if (localStorage.getItem('searchEngine') == null){
+        this.searchEngine = 'google';
+      }else{
+        this.searchEngine = localStorage.getItem('searchEngine')
+      }
     },
 
 
@@ -622,6 +630,10 @@ export default {
   watch: {
     activeTag(newActiveTag) {
       localStorage.setItem('activeTag', newActiveTag)
+    },
+
+    searchEngine(newSearchEngine){
+      localStorage.setItem('searchEngine', newSearchEngine)
     }
   }
 
