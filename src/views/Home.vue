@@ -4,7 +4,7 @@
   <el-main>
 
 
-    <img alt="Vue logo" src="../assets/logo2.png">
+    <img alt="Vue logo" src="../assets/logo2.png" >
 
     <el-row type="flex" justify="center" style="margin-top: 30px">
       <el-col :span="8">
@@ -94,7 +94,8 @@
       <el-dialog
           title="请输入网站信息"
           :visible.sync="dialogVisible"
-          width="30%">
+          top="50px"
+          width="400px">
 
         <el-form ref="ruleForm" status-icon :model="form" :rules="rules" label-width="80px">
           <el-form-item label="网站名" prop="name">
@@ -111,12 +112,14 @@
           <!-- 网站所属的分类 -->
           <el-form-item label="网站分类"  v-if="!isAdd">
 
-            <el-select v-model="form.tagId" placeholder="请选择">
+            <el-select v-model="form.tagId" placeholder="请选择" style="width: 100%!important;">
               <el-option
                   v-for="item in tagsOption"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
+                  :value="item.value"
+
+              >
               </el-option>
             </el-select>
 
@@ -135,7 +138,8 @@
       <el-dialog
           title="请输入分类信息"
           :visible.sync="dialogTagVisible"
-          width="30%">
+          top="60px"
+          width="400px">
 
         <el-form status-icon :model="tagForm" label-width="80px">
           <el-form-item label="分类名">
@@ -146,11 +150,11 @@
             <el-input type="number" v-model="tagForm.torder" spellcheck="false"></el-input>
           </el-form-item>
 
-          <el-form-item label="范围" >
+          <el-form-item label="可见范围" >
             <el-radio-group v-model="tagForm.secret" >
 
-              <el-radio :label = 0>公开</el-radio>
-              <el-radio :label = 1>私密</el-radio>
+              <el-radio-button :label = 0>公开</el-radio-button>
+              <el-radio-button :label = 1>私密</el-radio-button>
             </el-radio-group>
 
           </el-form-item>
@@ -169,9 +173,10 @@
       <el-dialog
           title="用户登录"
           :visible.sync="dialogLoginVisible"
-          width="30%"
+          top="200px"
+          width="400px"
       >
-        <el-form status-icon :model="loginForm" label-width="80px">
+        <el-form status-icon :model="loginForm" label-width="60px">
           <el-form-item label="用户名">
             <el-input type="text" v-model="loginForm.name" spellcheck="false"></el-input>
           </el-form-item>
@@ -319,7 +324,10 @@ export default {
             order: this.form.order,
             tagId: this.form.tagId
           })
-          Axios.put(api, params).then(this.getData)
+          Axios.put(api, params).then(this.getData).then(()=>{
+            // activeTag也跟着跳过去
+            this.activeTag = this.form.tagId.toString()
+          })
           this.dialogVisible = false
           this.$message('修改成功')
         } else {
