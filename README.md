@@ -70,13 +70,13 @@ http://test.fangshirui.cn
 此仓库是项目的前端组成部分。
 
 
-0. npm install
+1. npm install
 
-1. npm build 
+2. npm build 
 
-2. 导出dist文件夹下的文件到Nginx服务器路径
+3. 导出dist文件夹下的文件到Nginx服务器路径
 
-3. 配置Nginx反向代理
+4. 配置Nginx反向代理
 
     ```
     location /api {
