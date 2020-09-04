@@ -46,7 +46,7 @@
 
           <!-- tab 自定义 按钮 包括 删除和修改 -->
           <span slot="label" class="my-tag">
-            <i class="el-icon-edit " v-if="isEdit" @click="updateTag(tag.tid, tag.tname, tag.torder)">
+            <i class="el-icon-edit " v-if="isEdit" @click="updateTag(tag.tid, tag.tname, tag.torder, tag.secret)">
               <span style="color: #C0C4CC; font-size: 15px ">{{ tag.torder }}</span>
             </i>
             {{ tag.tname }}
@@ -64,7 +64,7 @@
               <!-- 由于后台接口的问题，如果某个分类没有网站，也会对应一个 id = 0 的空值，所以当 id = 0 时要排除-->
               <div class="my-button" v-if="web.id !== 0">
 
-              <span class="el-icon-edit edit-site" @click="editSite(web.id,web.name, web.url, web.order)" v-if="isEdit">
+              <span class="el-icon-edit edit-site" @click="editSite(web.id,web.name, web.url, web.order, web.tagId)" v-if="isEdit">
                 <span style="color: #C0C4CC; font-size: 15px">{{ web.order }}</span>
               </span>
 
@@ -105,6 +105,21 @@
           <el-form-item label="网站顺序" prop="order" v-if="!isAdd">
             <el-input type="number" v-model="form.order" spellcheck="false"></el-input>
           </el-form-item>
+
+
+          <!-- 网站所属的分类 -->
+          <el-form-item label="网站分类"  v-if="!isAdd">
+
+            <el-select v-model="form.tagId" placeholder="请选择">
+              <el-option
+                  v-for="item in tagsOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+              </el-option>
+            </el-select>
+
+          </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
@@ -129,6 +144,16 @@
           <el-form-item label="顺序" v-if="!isAddTag">
             <el-input type="number" v-model="tagForm.torder" spellcheck="false"></el-input>
           </el-form-item>
+
+          <el-form-item label="范围" >
+            <el-radio-group v-model="tagForm.secret" >
+
+              <el-radio :label = 0>公开</el-radio>
+              <el-radio :label = 1>私密</el-radio>
+            </el-radio-group>
+
+          </el-form-item>
+
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogTagVisible = false">取 消</el-button>
@@ -176,8 +201,7 @@ import qs from 'qs'
 // 全局 axios 请求都会加上这个token
 Axios.interceptors.request.use(config => {
   const token = localStorage.getItem('token')
-  console.log(token)
-  console.log('请求拦截，添加token')
+
   if (token) {
     config.headers.token = token
   }
@@ -203,7 +227,7 @@ export default {
         url: '',
         id: undefined,
         tagId: undefined,
-        order: undefined
+        order: undefined,
       },
       isAdd: false,
       isAddTag: false,
@@ -224,12 +248,15 @@ export default {
       tagForm: {
         tid: undefined,
         tname: '',
-        torder: undefined
+        torder: undefined,
+        secret: 0,
       },
       loginForm: {
         name: '',
         pwd: '',
       },
+
+      tagsOption: []
     }
   },
   methods: {
@@ -258,7 +285,6 @@ export default {
           console.log('请求管理员数据失败')
           this.isAdmin = false;
         }
-        console.log(this.websites)
         console.log('请求管理员数据成功')
         this.websites = response.data.result
         this.isAdmin = true;
@@ -267,13 +293,16 @@ export default {
     },
 
     // 网站小编辑按钮
-    editSite (id, name, url, order) {
+    editSite (id, name, url, order, tagId) {
       this.isAdd = false
       this.dialogVisible = true
       this.form.id = id
       this.form.name = name
       this.form.url = url
       this.form.order = order
+      this.form.tagId = tagId
+
+      this.updateTagsOption();
     },
 
     // 按下提交修改按钮，提交修改表单
@@ -286,16 +315,15 @@ export default {
             name: this.form.name,
             url: this.form.url,
             id: this.form.id,
-            order: this.form.order
+            order: this.form.order,
+            tagId: this.form.tagId
           })
           Axios.put(api, params).then(this.getData)
           this.dialogVisible = false
           this.$message('修改成功')
-          console.log('修改已提交')
         } else {
           // 表单不合法
           this.$message('参数不合法，修改失败')
-          console.log('参数不合法，无法提交')
           return false
         }
       })
@@ -328,6 +356,7 @@ export default {
 
     },
 
+    // 切换编辑模式 --- 进入编辑模式 退出编辑模式
     switchEditMode () {
 
       this.isEdit = !this.isEdit
@@ -349,6 +378,7 @@ export default {
       this.form.order = undefined
     },
 
+    // 添加网站 提交
     submitAdd (formName) {
       this.$refs[formName].validate((valid) => {
             if (valid) {
@@ -380,7 +410,7 @@ export default {
         type: 'warning'
       }).then(() => {
 
-        this.activeTag = '1';
+        this.displayTag();
 
         let api = '/api/tag?tid=';
 
@@ -409,6 +439,7 @@ export default {
       this.tagForm.torder = undefined
       this.tagForm.tid = undefined
       this.tagForm.tname = ''
+      this.tagForm.secret = 0
     },
 
     // 添加分类提交
@@ -416,6 +447,7 @@ export default {
       let api = '/api/tag'
       let params = qs.stringify({
         tname: this.tagForm.tname,
+        secret: this.tagForm.secret,
       })
       Axios.post(api, params).then((response) => {
         this.websites = response.data.result
@@ -426,12 +458,13 @@ export default {
       this.$message('添加新网站成功')
     },
 
-    updateTag (tid, tname, torder) {
+    updateTag (tid, tname, torder, secret) {
       this.dialogTagVisible = true
       this.isAddTag = false
       this.tagForm.tid = tid
       this.tagForm.tname = tname
       this.tagForm.torder = torder
+      this.tagForm.secret = secret
     },
 
     // 修改分类提交
@@ -440,7 +473,8 @@ export default {
       let params = qs.stringify({
         tname: this.tagForm.tname,
         tid: this.tagForm.tid,
-        torder: this.tagForm.torder
+        torder: this.tagForm.torder,
+        secret: this.tagForm.secret,
       })
       Axios.put(api, params).then((response) => {
         this.websites = response.data.result
@@ -463,13 +497,11 @@ export default {
       })
       Axios.post(api, params).then((response) => {
 
-        console.log(response)
         if (response.data.success === false) {
-          alert('登录失败')
+          this.$message("密码错误，登录失败")
           return
         }
 
-        console.log(response.data.result)
         this.token = response.data.result
 
         // 将token 保存在localStorage
@@ -482,7 +514,7 @@ export default {
     },
 
     logout () {
-      alert('登出')
+      this.$message("登出")
       localStorage.clear()
       this.getGuestData()
       this.isEdit = false
@@ -503,9 +535,14 @@ export default {
             this.getGuestData();
           }
           console.log('请求管理员数据成功')
-          this.websites = response.data.result
+          this.websites = response.data.result;
           this.isAdmin = true;
+        }).catch(err =>{
+          console.log(err)
         })
+
+
+
       }else{
         this.isAdmin = false;
         localStorage.clear();
@@ -519,8 +556,39 @@ export default {
       let api = '/api/openTag'
       Axios.get(api).then((response) => {
         this.websites = response.data.result
+      }).catch(
+          err =>{
+            console.log(err)
+          }
+      ).then(
+          // 处理显示初次显示的tab问题
+          () => {
+        this.displayTag();
+        console.log(this.activeTag);
+      }
+
+    )
+
+    },
+
+    // 优化显示，初始显示的 动态设置当前显示的第一个 分类的tid
+    displayTag(){
+      this.activeTag = this.websites[0].tid.toString();
+    },
+
+
+    // 更新 tagsOption 该数组对应 网站修改分类时候对应的 各个分类名 以及内部对应的 tid
+    // 每次进入修改网站，都会调用该函数
+    updateTagsOption(){
+      this.tagsOption = [];
+      this.websites.forEach((res) =>{
+        this.tagsOption.push({
+          value: res.tid,
+          label: res.tname
+        })
       })
     }
+
   },
 
   mounted () {
