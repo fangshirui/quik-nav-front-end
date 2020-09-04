@@ -34,6 +34,7 @@
       <el-button class="edit-button" v-if="isEdit" @click="addWebsite(activeTag)">添加网站</el-button>
 
 
+      <!--active Tag 实际上是 当前选中分类的 tid转字符串 -->
       <el-tabs type="card" v-model="activeTag">
 
         <!-- tag.tid + ''  是为了将数字转为字符串 -->
@@ -537,6 +538,7 @@ export default {
           console.log('请求管理员数据成功')
           this.websites = response.data.result;
           this.isAdmin = true;
+          this.displayTag();
         }).catch(err =>{
           console.log(err)
         })
@@ -573,7 +575,12 @@ export default {
 
     // 优化显示，初始显示的 动态设置当前显示的第一个 分类的tid
     displayTag(){
-      this.activeTag = this.websites[0].tid.toString();
+
+      if (localStorage.getItem('activeTag') == null) {
+        this.activeTag = this.websites[0].tid.toString();
+      }else{
+        this.activeTag = localStorage.getItem('activeTag')
+      }
     },
 
 
@@ -591,8 +598,17 @@ export default {
 
   },
 
+
+
   mounted () {
     this.autoLogin()
+  },
+
+  // 侦听 activeTag
+  watch: {
+    activeTag(newActiveTag) {
+      localStorage.setItem('activeTag', newActiveTag)
+    }
   }
 
 }
