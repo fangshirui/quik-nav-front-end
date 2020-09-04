@@ -4,13 +4,14 @@
   <el-main>
 
 
+
     <img alt="Vue logo" src="../assets/logo2.png" >
 
     <el-row type="flex" justify="center" style="margin-top: 30px">
       <el-col :span="8">
         <!--设置keyup 按enter键也能触发搜索 -->
-        <el-input v-model="keyWord" @keyup.enter.native="search" type="text"  autofocus>
-          <i slot="suffix" class="el-input__icon el-icon-search" ></i>
+        <el-input v-model="keyWord" @keyup.enter.native="search" type="text"  autofocus clearable>
+          <i slot="prefix" class="el-input__icon el-icon-search" ></i>
         </el-input>
       </el-col>
 
@@ -18,10 +19,11 @@
 
 
     <!--change 时也会触发搜索-->
-    <el-radio-group v-model="searchEngine" class="search-group" @change="search">
-      <el-radio-button label="google">谷歌</el-radio-button>
-      <el-radio-button label="baidu">百度</el-radio-button>
+    <el-radio-group v-model="searchEngine" class="search-group" @change="search" >
+      <el-radio-button label="google">Google</el-radio-button>
+      <el-radio-button label="baidu">Baidu</el-radio-button>
       <el-radio-button label="doge">Doge</el-radio-button>
+      <el-radio-button label="duckgo">DuckGo</el-radio-button>
     </el-radio-group>
 
 
@@ -29,7 +31,7 @@
 
       <el-button class="el-icon-user edit-button" @click="login" v-if="!isAdmin">登录</el-button>
       <el-button class="el-icon-user edit-button" @click="logout" v-if="isAdmin">登出</el-button>
-      <el-button class="el-icon-edit edit-button" @click="switchEditMode" type="primary" v-if="isAdmin">
+      <el-button class="el-icon-edit edit-button" @click="switchEditMode"  v-if="isAdmin">
         {{ editString }}
       </el-button>
       <el-button class="edit-button" v-if="isEdit" @click="addTag">添加分类</el-button>
@@ -274,6 +276,7 @@ export default {
       }
       if (this.searchEngine === 'google') {
         window.open('https://google.com/search?q=' + this.keyWord, '_blank')
+        // this.keyWord = ''
       }
 
       if (this.searchEngine === 'baidu') {
@@ -283,6 +286,12 @@ export default {
       if (this.searchEngine === 'doge') {
         window.open('https://dogedoge.com/results?q=' + this.keyWord, '_blank')
       }
+
+      if (this.searchEngine === 'duckgo') {
+        window.open('https://duckduckgo.com/?q=' + this.keyWord, '_blank')
+      }
+
+
     },
 
     getData () {
@@ -532,7 +541,7 @@ export default {
 
     logout () {
       this.$message("登出")
-      localStorage.clear()
+      localStorage.setItem('token', '');
       this.getGuestData()
       this.isEdit = false
       this.isAdmin = false
@@ -541,15 +550,17 @@ export default {
     autoLogin () {
 
       // 如果localstorage 有token 就取出来验证是否是真的
-      if (localStorage.getItem('token')) {
+      if (localStorage.getItem('token') && localStorage.getItem('token') !== '') {
 
         let api = '/api/tag'
         Axios.get(api).then((response) => {
           if (response.data.success === false) {
             console.log('请求管理员数据失败')
+            this.$message("登录信息过期，请重新登陆")
             this.isAdmin = false;
-            localStorage.clear();
+            localStorage.setItem('token', '');
             this.getGuestData();
+            return;
           }
           console.log('请求管理员数据成功')
           this.websites = response.data.result;
@@ -563,7 +574,7 @@ export default {
 
       }else{
         this.isAdmin = false;
-        localStorage.clear();
+        localStorage.setItem('token', '')
         this.getGuestData();
       }
 
@@ -590,6 +601,7 @@ export default {
     },
 
     // 优化显示，初始显示的 动态设置当前显示的第一个 分类的tid
+    // 同时他也负责选择初始化搜索引擎
     displayTag(){
 
       if (localStorage.getItem('activeTag') == null) {
