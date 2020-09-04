@@ -411,13 +411,16 @@ export default {
         type: 'warning'
       }).then(() => {
 
-        this.displayTag();
 
         let api = '/api/tag?tid=';
 
         Axios.delete(api + tagId).then((response) => {
           this.websites = response.data.result
+        }).then(() =>{
+          // 删除后跳到倒数第一个分类
+          this.activeTag = this.websites[this.websites.length - 1].tid.toString();
         })
+
 
         this.$message({
           type: 'success',
@@ -452,6 +455,9 @@ export default {
       })
       Axios.post(api, params).then((response) => {
         this.websites = response.data.result
+      }).then(() =>{
+        // 跳转到最后一个分类
+        this.activeTag = this.websites[this.websites.length - 1].tid.toString();
       })
 
       this.isAddTag = false
