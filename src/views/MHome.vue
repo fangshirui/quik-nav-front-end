@@ -68,7 +68,7 @@
             >
               <!--由于 v-for 和 v-if 不能同级使用，将v-if 放入v-for 的循环中-->
               <!-- 由于后台接口的问题，如果某个分类没有网站，也会对应一个 id = 0 的空值，所以当 id = 0 时要排除-->
-              <div class="my-button" v-if="web.id !== 0">
+              <div class="my-button-mobi" v-if="web.id !== 0">
 
               <span class="el-icon-edit edit-site" @click="editSite(web.id,web.name, web.url, web.order, web.tagId)"
                     v-if="isEdit">
@@ -672,7 +672,7 @@ export default {
 
 }
 
-.my-button {
+.my-button-mobi {
   width: 200px;
   height: 35px;
   font-size: 20px !important;
