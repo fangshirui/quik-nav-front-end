@@ -1,28 +1,23 @@
 <template>
 
 
-  <el-main class="el-pc">
-    <!--登陆框-->
-    <div style="position: fixed; right: 30px">
-      <el-button class="el-icon-user edit-button" @click="login" v-if="!isAdmin">登录</el-button>
-      <el-button class="el-icon-user edit-button" @click="logout" v-if="isAdmin">登出</el-button>
-      <el-button class="el-icon-edit edit-button" @click="switchEditMode" v-if="isAdmin">
+  <el-main>
+
+
+    <el-button-group>
+      <el-button class="el-icon-user" @click="login" v-if="!isAdmin">登录</el-button>
+      <el-button class="el-icon-user " @click="logout" v-if="isAdmin">登出</el-button>
+
+      <el-button @click="switchEditMode" v-if="isAdmin">
         {{ editString }}
       </el-button>
-      <el-button class="edit-button" v-if="isEdit" @click="addTag">添加分类</el-button>
-      <el-button class="edit-button" v-if="isEdit" @click="addWebsite(activeTag)">添加网站</el-button>
-
-    </div>
-
-    <!--图片展示-->
-    <div style="margin-top: 20px">
-      <img alt="Vue logo" src="../assets/logo2.png" style="alignment: center">
-    </div>
+      <el-button v-if="isEdit" @click="addTag">加分类</el-button>
+      <el-button v-if="isEdit" @click="addWebsite(activeTag)">加网站</el-button>
+    </el-button-group>
 
 
-    <!-- 搜索框 -->
     <el-row type="flex" justify="center" style="margin-top: 30px">
-      <el-col :span="7">
+      <el-col :span="20">
         <!--设置keyup 按enter键也能触发搜索 -->
         <el-input v-model="keyWord" @keyup.enter.native="search" type="text" autofocus clearable>
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -33,22 +28,19 @@
 
 
     <!--change 时也会触发搜索-->
-    <!-- 搜索引擎 按钮组-->
-    <div>
-      <el-radio-group v-model="searchEngine" class="search-group" @change="search">
-        <el-radio-button label="google">Google</el-radio-button>
-        <el-radio-button label="baidu">Baidu</el-radio-button>
-        <el-radio-button label="doge">Doge</el-radio-button>
-        <el-radio-button label="duckgo">DuckGo</el-radio-button>
-      </el-radio-group>
-    </div>
+    <el-radio-group v-model="searchEngine" class="search-group" @change="search">
+      <el-radio-button label="google">Google</el-radio-button>
+      <el-radio-button label="baidu">Baidu</el-radio-button>
+      <el-radio-button label="doge">Doge</el-radio-button>
+      <el-radio-button label="duckgo">DuckGo</el-radio-button>
+    </el-radio-group>
 
 
     <div class="tabs">
 
 
       <!--active Tag 实际上是 当前选中分类的 tid转字符串 -->
-      <el-tabs type="card" v-model="activeTag">
+      <el-tabs  v-model="activeTag" tab-position="left">
 
         <!-- tag.tid + ''  是为了将数字转为字符串 -->
         <el-tab-pane
@@ -655,19 +647,12 @@ export default {
 
 
 <style>
-
-.el-pc {
-  margin-left: 15%;
-  margin-right: 15%;
-  padding-top: 30px;
-}
-
 .search-group {
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .tabs {
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .btn-box {
@@ -688,7 +673,7 @@ export default {
 }
 
 .my-button {
-  min-width: 160px;
+  width: 200px;
   height: 35px;
   font-size: 20px !important;
   line-height: 100%;
@@ -700,9 +685,7 @@ export default {
   justify-content: space-around;
 }
 
-.edit-button {
-  margin-left: 0 !important;
-}
+
 
 
 .edit-site {

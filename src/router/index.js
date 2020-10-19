@@ -1,8 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import MHome from '@/views/MHome'
 
 Vue.use(VueRouter)
+
+// 解决重复导航引起的性能警告 NavigationDuplicated:
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 const routes = [
   {
@@ -10,13 +17,19 @@ const routes = [
     name: 'About',
     component: () => import('../views/About.vue')
   },
+
   {
-    path: '/',
+    path: '/pc_index',
     name: 'Home',
-    component: Home,
+    component: Home
   },
   {
-    path: "/*",
+    path: '/m_index',
+    name: 'MHome',
+    component: MHome,
+  },
+  {
+    path: '/*',
     name: '404',
     component: () => import('../views/Home.vue'),
   }
@@ -25,7 +38,7 @@ const routes = [
 
 // 设置为history模式，否则url后面会有锚点#
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   routes
 })
 
