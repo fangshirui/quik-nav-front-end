@@ -4,13 +4,16 @@
   <el-main class="el-pc">
     <!--登陆框-->
     <div style="position: fixed; right: 30px">
-      <el-button class="el-icon-user edit-button" @click="login" v-if="!isAdmin">登录</el-button>
-      <el-button class="el-icon-user edit-button" @click="logout" v-if="isAdmin">登出</el-button>
+      <el-button class="edit-button" v-if="isEdit" @click="addTag">添加分类</el-button>
+      <el-button class="edit-button" v-if="isEdit" @click="addWebsite(activeTag)">添加网站</el-button>
+
       <el-button class="el-icon-edit edit-button" @click="switchEditMode" v-if="isAdmin">
         {{ editString }}
       </el-button>
-      <el-button class="edit-button" v-if="isEdit" @click="addTag">添加分类</el-button>
-      <el-button class="edit-button" v-if="isEdit" @click="addWebsite(activeTag)">添加网站</el-button>
+
+      <el-button class="el-icon-user edit-button" @click="login" v-if="!isAdmin">登录</el-button>
+      <el-button class="el-icon-user edit-button" @click="logout" v-if="isAdmin">登出</el-button>
+
 
     </div>
 
@@ -392,7 +395,7 @@ export default {
       if (this.isEdit) {
         this.editString = '退出编辑'
       } else {
-        this.editString = '编辑'
+        this.editString = '进入编辑'
       }
     },
 
