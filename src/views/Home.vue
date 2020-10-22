@@ -254,7 +254,7 @@ export default {
       },
       isAdd: false,
       isAddTag: false,
-      editString: '编辑',
+      editString: '进入编辑',
       rules: {
         name: [
           { required: true, message: '请输入网站名称', trigger: 'blur' },
