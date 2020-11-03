@@ -25,9 +25,9 @@
 
     <!-- 搜索框 -->
     <el-row type="flex" justify="center" style="margin-top: 30px">
-      <el-col :span="7">
+      <el-col :span="12">
         <!--设置keyup 按enter键也能触发搜索 -->
-        <el-input v-model="keyWord" @keyup.enter.native="search" type="text" autofocus clearable>
+        <el-input v-model="keyWord" @keyup.enter.native="search" type="text" size="large" autofocus clearable  >
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
       </el-col>
@@ -722,5 +722,10 @@ export default {
   line-height: 1.5 !important;
 }
 
+.el-input__inner {
+  font-size: 20px!important;
+  height: 50px!important;
+  line-height: 50px!important;
+}
 
 </style>
