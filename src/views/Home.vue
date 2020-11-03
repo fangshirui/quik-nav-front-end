@@ -18,8 +18,8 @@
     </div>
 
     <!--图片展示-->
-    <div style="margin-top: 20px">
-      <img alt="Vue logo" src="../assets/logo2.png" style="alignment: center">
+    <div style="margin-top: 4%">
+      <img alt="Vue logo" src="../assets/logo2.png" style="alignment: center;width: 20%" >
     </div>
 
 
