@@ -19,7 +19,7 @@
 
     <!--图片展示-->
     <div style="margin-top: 4%">
-      <img alt="Vue logo" src="../assets/logo2.png" style="alignment: center;width: 20%" >
+      <img alt="Vue logo" src="../assets/logo2.png" style="alignment: center;width: 20%">
     </div>
 
 
@@ -27,7 +27,7 @@
     <el-row type="flex" justify="center" style="margin-top: 30px">
       <el-col :span="12">
         <!--设置keyup 按enter键也能触发搜索 -->
-        <el-input v-model="keyWord" @keyup.enter.native="search" type="text" size="large" autofocus clearable  >
+        <el-input v-model="keyWord" @keyup.enter.native="search" type="text" size="large" autofocus clearable>
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
       </el-col>
@@ -659,11 +659,21 @@ export default {
 
 <style>
 
-.el-pc {
-  margin-left: 15%;
-  margin-right: 15%;
-  padding-top: 30px;
+/*屏幕自适应 调整 */
+@media screen and (min-width: 1280px) {
+  .el-pc {
+    margin-left: 15%;
+    margin-right: 15%;
+    padding-top: 30px;
+  }
 }
+
+@media screen and (max-width: 1280px){
+  .el-pc {
+    padding-top: 30px;
+  }
+}
+
 
 .search-group {
   margin-top: 50px;
@@ -723,9 +733,9 @@ export default {
 }
 
 .el-input__inner {
-  font-size: 20px!important;
-  height: 50px!important;
-  line-height: 50px!important;
+  font-size: 20px !important;
+  height: 50px !important;
+  line-height: 50px !important;
 }
 
 </style>
