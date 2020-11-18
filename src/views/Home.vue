@@ -27,7 +27,7 @@
     <el-row type="flex" justify="center" style="margin-top: 30px">
       <el-col :span="12">
         <!--设置keyup 按enter键也能触发搜索 -->
-        <el-input v-model="keyWord" @keyup.enter.native="search" type="text" size="large" autofocus clearable>
+        <el-input v-model="keyWord" id="input" @keyup.enter.native="search" type="text" size="large" clearable>
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
       </el-col>
@@ -639,10 +639,11 @@ export default {
   },
 
   mounted () {
-    this.autoLogin()
+    this.autoLogin();
+    document.getElementById("input").focus();
   },
 
-  // 侦听 activeTag
+  // 侦听 activeTag,searchEngine,实现状态保存
   watch: {
     activeTag (newActiveTag) {
       localStorage.setItem('activeTag', newActiveTag)
@@ -732,6 +733,7 @@ export default {
   line-height: 1.5 !important;
 }
 
+/* 强制放大输入框  不可删除*/
 .el-input__inner {
   font-size: 20px !important;
   height: 50px !important;

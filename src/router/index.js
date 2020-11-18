@@ -36,7 +36,8 @@ const routes = [
 
 ]
 
-// 设置为history模式，否则url后面会有锚点#
+// 设置为history模式，否则url后面会有锚点#,
+// 改为hash,是因为添加了移动端适配后，需要进行跳转，history模式无法正常使用
 const router = new VueRouter({
   mode: 'hash',
   routes
