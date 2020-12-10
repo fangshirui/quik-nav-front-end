@@ -9,10 +9,12 @@ module.exports = {
         target: 'http://test.fangshirui.cn:8081/api',
         changeOrigin: true,
         pathRewrite: {
-          '^/api' : ''
+          '^/api': ''
         }
       }
     }
-  }
-
+  },
+  // 生产环境 是否需要 source map, 默认为true
+  // 定义为false可以优化前端代码量
+  productionSourceMap: false
 }
