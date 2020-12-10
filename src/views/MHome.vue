@@ -19,7 +19,7 @@
     <el-row type="flex" justify="center" style="margin-top: 30px">
       <el-col :span="20">
         <!--设置keyup 按enter键也能触发搜索 -->
-        <el-input v-model="keyWord" @keyup.enter.native="search" type="text" autofocus clearable>
+        <el-input id="search-input" v-model="keyWord" @keyup.enter.native="search" type="text" clearable>
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
       </el-col>
@@ -45,25 +45,25 @@
         <!-- tag.tid + ''  是为了将数字转为字符串 -->
         <el-tab-pane
             v-model="websites"
-            v-for="tag in websites"
-            :name="tag.tid + ''"
-            :key="tag.tid"
+            v-for="{secret, tid, tname, torder, websiteList} in websites"
+            :name="tid + ''"
+            :key="tid"
         >
 
           <!-- tab 自定义 按钮 包括 删除和修改 -->
           <span slot="label" class="my-tag">
-            <i class="el-icon-edit " v-if="isEdit" @click="updateTag(tag.tid, tag.tname, tag.torder, tag.secret)">
-              <span style="color: #C0C4CC; font-size: 15px ">{{ tag.torder }}</span>
+            <i class="el-icon-edit " v-if="isEdit" @click="updateTag(tid, tname, torder, secret)">
+              <span style="color: #C0C4CC; font-size: 15px ">{{ torder }}</span>
             </i>
-            {{ tag.tname }}
-            <i class="el-icon-delete " v-if="isEdit" @click="removeTag(tag.tid, tag.tname)"></i>
+            {{ tname }}
+            <i class="el-icon-delete " v-if="isEdit" @click="removeTag(tid, tname)"></i>
           </span>
 
 
           <div class="btn-box">
 
             <div
-                v-for="web in tag.websiteList"
+                v-for="web in (websiteList)"
                 :key="web.id"
             >
               <!--由于 v-for 和 v-if 不能同级使用，将v-if 放入v-for 的循环中-->
@@ -628,7 +628,8 @@ export default {
   },
 
   mounted () {
-    this.autoLogin()
+    this.autoLogin();
+    document.getElementById("search-input").focus();
   },
 
   // 侦听 activeTag
