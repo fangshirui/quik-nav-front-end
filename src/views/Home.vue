@@ -661,15 +661,15 @@ export default {
 <style>
 
 /*屏幕自适应 调整 */
-@media screen and (min-width: 1280px) {
+@media screen and (min-width: 1500px) {
   .el-pc {
-    margin-left: 15%;
-    margin-right: 15%;
+    margin-left: 12%;
+    margin-right: 12%;
     padding-top: 30px;
   }
 }
 
-@media screen and (max-width: 1280px){
+@media screen and (max-width: 1500px){
   .el-pc {
     padding-top: 30px;
   }
