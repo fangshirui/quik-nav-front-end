@@ -31,8 +31,8 @@
     <el-radio-group v-model="searchEngine" class="search-group" @change="search">
       <el-radio-button label="google">Google</el-radio-button>
       <el-radio-button label="baidu">Baidu</el-radio-button>
-      <el-radio-button label="doge">Doge</el-radio-button>
-      <el-radio-button label="duckgo">DuckGo</el-radio-button>
+      <el-radio-button label="56pan">PanSo</el-radio-button>
+      <el-radio-button label="magi">Magi</el-radio-button>
     </el-radio-group>
 
 
@@ -285,12 +285,12 @@ export default {
         window.open('https://baidu.com/s?wd=' + this.keyWord, '_blank')
       }
 
-      if (this.searchEngine === 'doge') {
-        window.open('https://dogedoge.com/results?q=' + this.keyWord, '_blank')
+      if (this.searchEngine === '56pan') {
+        window.open('http://56wangpan.com/search/kw' + this.keyWord, '_blank')
       }
 
-      if (this.searchEngine === 'duckgo') {
-        window.open('https://duckduckgo.com/?q=' + this.keyWord, '_blank')
+      if (this.searchEngine === 'magi') {
+        window.open('https://magi.com/search?q=' + this.keyWord, '_blank')
       }
 
     },
